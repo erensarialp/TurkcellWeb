@@ -4,6 +4,7 @@ import com.turkcell.intro.web.entity.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -11,9 +12,12 @@ import java.util.Random;
 @RequestMapping("/api/v1/products") //localhost:port/api/v1/products ile basliyorsa istek buraya gelsin.
 public class ProductsController {
 
+    //Ram'de tutulur.
+    private List<Product> products = new ArrayList<Product>();
+
     @GetMapping()
     public List<Product> getAll(){
-        return null;
+        return products;
     }
 
     //Ekleme endpointleri ekleme sonrasi durum icin eklenen entity'i geri doner.
@@ -22,6 +26,8 @@ public class ProductsController {
     public Product add(@RequestBody Product product){
         Random random = new Random();
         product.setId(random.nextInt(1000));
+
+        products.add(product);
         return product;
 
     }
