@@ -1,11 +1,32 @@
 package com.turkcell.intro.web.entity;
 
-public class Product {
+import jakarta.persistence.*;
 
+@Entity
+@Table(name="products")
+public class Product {
+    @Id
+    @Column(name="id") // Opsiyonel
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name="name") //Ayni isim kullanilacaksa gerekli degildir.
     private String name;
-    private float price;
+
+    @Column(name="unit_price")
+    private float unitPrice;
+
+    @Column(name="stock")
     private float stock;
+
+    @Column(name="description")
+    private String description;
+
+    @ManyToOne() //FK hangi tabloda ise.Ona ManyToOne digerine OneToMany.
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+
 
     public int getId() {
         return id;
@@ -23,12 +44,12 @@ public class Product {
         this.name = name;
     }
 
-    public float getPrice() {
-        return price;
+    public float getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setUnitPrice(float unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public float getStock() {
@@ -37,5 +58,21 @@ public class Product {
 
     public void setStock(float stock) {
         this.stock = stock;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
