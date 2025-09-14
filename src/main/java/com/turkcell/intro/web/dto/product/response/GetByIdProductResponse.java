@@ -1,30 +1,27 @@
 package com.turkcell.intro.web.dto.product.response;
 
-public class CreatedProductResponse {
+public class GetByIdProductResponse {
 
     private int id;
     private String name;
     private float stock;
     private String description;
     private float unitPrice;
+    private int categoryId;
     private String categoryName;
 
-
-    public CreatedProductResponse() {
+    public GetByIdProductResponse() {
     }
 
-    public CreatedProductResponse(int id, String name, float stock, String description, float unitPrice,String categoryName) {
+    public GetByIdProductResponse(int id, String name, float stock, String description, float unitPrice, int categoryId, String categoryName) {
         this.id = id;
         this.name = name;
         this.stock = stock;
         this.description = description;
         this.unitPrice = unitPrice;
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
-
-    public CreatedProductResponse(int id, String name, float stock, String description, float unitPrice) {
-    }
-
 
     public int getId() {
         return id;
@@ -64,6 +61,14 @@ public class CreatedProductResponse {
 
     public void setUnitPrice(float unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
