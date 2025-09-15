@@ -6,6 +6,7 @@ import com.turkcell.intro.web.dto.product.response.CreatedProductResponse;
 import com.turkcell.intro.web.dto.product.response.GetByIdProductResponse;
 import com.turkcell.intro.web.dto.product.response.SearchProductResponse;
 import com.turkcell.intro.web.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class ProductsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedProductResponse add(@RequestBody CreateProductRequest request){
+    public CreatedProductResponse add(@Valid @RequestBody CreateProductRequest request){
         return productService.add(request);
     }
 

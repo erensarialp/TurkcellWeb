@@ -8,13 +8,16 @@ import com.turkcell.intro.web.dto.product.response.SearchProductResponse;
 import com.turkcell.intro.web.entity.Category;
 import com.turkcell.intro.web.entity.Product;
 import com.turkcell.intro.web.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service //IoC'e bean olarak ekle.
+@Validated
 public class ProductService {
 
     //final -> yalnizca constructor uzerinden set edilir.
@@ -26,7 +29,9 @@ public class ProductService {
         this.categoryService = categoryService;
     }
 
-    public CreatedProductResponse add(CreateProductRequest createProductRequest){
+    //Servis - Servis cagrisindan dolayi validasyonu service icinde yapmak en dogurusudur
+    //Controller'a da eklemek iyi olur.Yani hem Service hem Controller'da @Valid kullan.
+    public CreatedProductResponse add(@Valid CreateProductRequest createProductRequest){
         Product product = new Product();
 
         product.setName(createProductRequest.getName());
