@@ -1,0 +1,23 @@
+package com.turkcell.intro.web.mapper;
+
+import com.turkcell.intro.web.dto.product.request.CreateProductRequest;
+import com.turkcell.intro.web.dto.product.response.CreatedProductResponse;
+import com.turkcell.intro.web.entity.Product;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(componentModel = "spring")
+public interface ProductMapper {
+
+    // Disaridan bu mapper'a erisim icin
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+
+    @Mapping(target="category.id", source = "categoryId")
+    Product createProductRequestToProduct(CreateProductRequest createProductRequest);
+
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "categoryId", source = "category.id")
+    CreatedProductResponse productToCreatedProductResponse(Product product);
+
+}

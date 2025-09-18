@@ -7,7 +7,10 @@ import com.turkcell.intro.web.dto.product.response.GetByIdProductResponse;
 import com.turkcell.intro.web.dto.product.response.SearchProductResponse;
 import com.turkcell.intro.web.entity.Category;
 import com.turkcell.intro.web.entity.Product;
+import com.turkcell.intro.web.mapper.ProductMapper;
 import com.turkcell.intro.web.repository.ProductRepository;
+import com.turkcell.intro.web.rules.CategoryBusinessRules;
+import com.turkcell.intro.web.rules.ProductBusinessRules;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -21,37 +24,33 @@ import java.util.List;
 public class ProductService {
 
     //final -> yalnizca constructor uzerinden set edilir.
-    private ProductRepository productRepository;
-    private CategoryService categoryService;
+    private final ProductRepository productRepository;
+    private final ProductBusinessRules productBusinessRules;
+    private final CategoryService categoryService;
+    private final CategoryBusinessRules categoryBusinessRules;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, ProductBusinessRules productBusinessRules, CategoryService categoryService, CategoryBusinessRules categoryBusinessRules) {
         this.productRepository = productRepository;
+        this.productBusinessRules = productBusinessRules;
         this.categoryService = categoryService;
+        this.categoryBusinessRules = categoryBusinessRules;
+        this.productMapper = ProductMapper.INSTANCE;
     }
+
 
     //Servis - Servis cagrisindan dolayi validasyonu service icinde yapmak en dogurusudur
     //Controller'a da eklemek iyi olur.Yani hem Service hem Controller'da @Valid kullan.
-    public CreatedProductResponse add(@Valid CreateProductRequest createProductRequest){
-        Product product = new Product();
+    //Fonksiyona gelen her cagri void olmalidir.
+    public CreatedProductResponse add(@Valid CreateProductRequest createProductRequest) {
 
-        product.setName(createProductRequest.getName());
-        product.setUnitPrice(createProductRequest.getUnitPrice());
-        product.setStock(createProductRequest.getStock());
-        product.setDescription(createProductRequest.getDescription());
+        productBusinessRules.productMustNotExistWithSameName(createProductRequest.getName());
+        Category category = categoryBusinessRules.categoryShouldExistWithGivenId(createProductRequest.getCategoryId());
 
-        Category category = categoryService
-                .findCategoryById(createProductRequest.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("Bu id ile bir kategori bulunamadi."));
-        product.setCategory(category);
-
+        Product product = productMapper.createProductRequestToProduct(createProductRequest);
         productRepository.save(product);
 
-        return new CreatedProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getStock(),
-                product.getDescription(),
-                product.getUnitPrice());
+        return productMapper.productToCreatedProductResponse(product);
     }
 
 

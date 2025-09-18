@@ -8,13 +8,10 @@ public class CreateProductRequest {
 
     @NotBlank
     private String name;
-
     @Positive
     private float unitPrice;
-
     @Positive
     private float stock;
-
     @NotBlank
     @Size(min = 10, max = 50)
     private String description;
